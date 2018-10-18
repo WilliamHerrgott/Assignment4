@@ -26,7 +26,7 @@ namespace Assignment4
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.ToTable("categories");
-            builder.Property(x => x.Id).HasColumnName("categoryid").ForNpgsqlUseSequenceHiLo();
+            builder.Property(x => x.Id).HasColumnName("categoryid");
             builder.Property(x => x.Name).HasColumnName("categoryname");
             builder.Property(x => x.Description).HasColumnName("description");
         }
@@ -147,14 +147,13 @@ namespace Assignment4
     
     public class DataService
     {
-        public ICollection<Category> GetCategories()
+        public List<Category> GetCategories()
         {
-//            using (var context = new Context())
-//            {
-//                var cat = context.Categories.Take(-1);
-//                return cat;
-//            }
-            return null;
+            using (var context = new Context())
+            {
+                var cats = (from r in context.Categories select r).ToList();
+                return cats;
+            }
         }
         
         public Category GetCategory(int id)
@@ -184,7 +183,15 @@ namespace Assignment4
 
         public bool DeleteCategory(int id)
         {
-            return false;
+            using (var context = new Context())
+            {
+                var cat = context.Categories
+                    .FirstOrDefault(x => x.Id == id);
+                if (cat == null)
+                    return false;
+                context.Categories.Remove(cat);
+                return true;
+            }
         }
         
         public bool UpdateCategory(int id, string newName, string newDescription)
@@ -204,18 +211,20 @@ namespace Assignment4
         
         public ICollection<Product> GetProductByName(string name)
         {
-//            using (var context = new Context())
-//            {
-//                var prod = context.Products
-//                    .Where();
-//                return prod;
-//            }
-            return null;
+             using (var context = new Context())
+            {
+                var prods = (from p in context.Products where p.Name.Contains(name) select p).ToList();
+                return prods;
+            }
         }
         
         public ICollection<Product> GetProductByCategory(int categoryId)
         {
-            return null;
+            using (var context = new Context())
+            {
+                var prods = (from p in context.Products where p.CategoryId == categoryId select p).ToList();
+                return prods;
+            }
         }
 
         public Order GetOrder(int id)
@@ -230,7 +239,11 @@ namespace Assignment4
         
         public ICollection<Order> GetOrders()
         {
-            return null;
+            using (var context = new Context())
+            {
+                var orders = (from o in context.Orders select o).ToList();
+                return orders;
+            }
         }
 
         public ICollection<OrderDetails> GetOrderDetailsByOrderId(int id)

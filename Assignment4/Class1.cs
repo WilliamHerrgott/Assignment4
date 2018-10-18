@@ -15,6 +15,7 @@ namespace Assignment4
     public class Category
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -25,7 +26,7 @@ namespace Assignment4
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.ToTable("categories");
-            builder.Property(x => x.Id).HasColumnName("categoryid");
+            builder.Property(x => x.Id).HasColumnName("categoryid").ForNpgsqlUseSequenceHiLo();
             builder.Property(x => x.Name).HasColumnName("categoryname");
             builder.Property(x => x.Description).HasColumnName("description");
         }
@@ -52,17 +53,15 @@ namespace Assignment4
             builder.Property(x => x.CategoryId).HasColumnName("categoryid");
             builder.Property(x => x.Name).HasColumnName("productname");
             builder.Property(x => x.UnitPrice).HasColumnName("unitprice");
-            builder.Property(x => x.QuantityPerUnit).HasColumnName("quantityperunits");
+            builder.Property(x => x.QuantityPerUnit).HasColumnName("quantityperunit");
             builder.Property(x => x.UnitsInStock).HasColumnName("unitsinstock");
         }
     }
 
     public class OrderDetails
     {
-        [Key]
         public int OrderId { get; set; }
         public Order Order { get; set; }
-        [Key]
         public int ProductId { get; set; }
         public Product Product { get; set; }
         public double UnitPrice { get; set; }
@@ -80,6 +79,7 @@ namespace Assignment4
             builder.Property(x => x.UnitPrice).HasColumnName("unitprice");
             builder.Property(x => x.Quantity).HasColumnName("quantity");
             builder.Property(x => x.Discount).HasColumnName("discount");
+            builder.HasKey(o => new {o.OrderId, o.ProductId});
         }
     }
     
@@ -169,16 +169,17 @@ namespace Assignment4
 
         public Category CreateCategory(string name, string description)
         {
-//            var optionsBuilder = new DbContextOptionsBuilder<Context>();
-//            optionsBuilder.UseNpgsql("Server=localhost;Database=library");
-//            using (var db = new Context(optionsBuilder.Options))
-//            {
-//                var _cat = new Category {Name = name, Description = description};
-//                db.Categories.Add(_cat);
-//                db.SaveChanges();
-//                return _cat;
-//            }
-            return null;
+            using (var context = new Context())
+            {
+                var cat = context.Categories.Add(new Category
+                {
+                    Name = name,
+                    Description = description
+                });
+
+                context.SaveChanges();
+                return cat.Entity;
+            }
         }
 
         public bool DeleteCategory(int id)

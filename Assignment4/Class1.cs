@@ -153,6 +153,7 @@ namespace Assignment4
 //                var cat = context.Categories.Take(-1);
 //                return cat;
 //            }
+            return null;
         }
         
         public Category GetCategory(int id)

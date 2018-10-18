@@ -204,7 +204,7 @@ namespace Assignment4
             using (var context = new Context())
             {
                 var prod = context.Products.Include(x => x.Category)
-                    .Single(b => b.Id == id);
+                    .FirstOrDefault(b => b.Id == id);
                 return prod;
             }
         }
@@ -222,7 +222,8 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var prods = (from p in context.Products where p.CategoryId == categoryId select p).ToList();
+                var prods = (from p in context.Products where p.CategoryId == categoryId select p).Include(p => p.Category)
+                    .ToList();
                 return prods;
             }
         }
@@ -231,8 +232,8 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var ord = context.Orders
-                    .Single(b => b.Id == id);
+                var ord = context.Orders.Include(x => x.OrderDetails)
+                    .FirstOrDefault(b => b.Id == id);
                 return ord;
             }
         }
@@ -248,12 +249,24 @@ namespace Assignment4
 
         public ICollection<OrderDetails> GetOrderDetailsByOrderId(int id)
         {
-            return null;
+            using (var context = new Context())
+            {
+                var orders = context.OrderDetails.Where(o => o.OrderId == id)
+                    .Include(o => o.Product).ToList();
+                return orders;
+            }
         }
         
         public ICollection<OrderDetails> GetOrderDetailsByProductId(int id)
         {
-            return null;
+            using (var context = new Context())
+            {
+                var orders = context.OrderDetails.Where(o=>o.ProductId == id)
+                    .Include(o => o.Order)
+                    .OrderBy(p => p.Order.Date)
+                    .ToList();
+                return orders;
+            }
         }
     }
 }

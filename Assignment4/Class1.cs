@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.M;
 
 
 namespace Assignment4
 {
-//    [Table(name = "Categories")]
+    [Table(Name = "Categories")]
     public class Category
     {
         public int Id { get; set; }

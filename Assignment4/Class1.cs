@@ -87,6 +87,7 @@ namespace Assignment4
     {
         [Key]
         public int Id { get; set; }
+        public List<OrderDetails> OrderDetails { get; set; }
         public DateTime Date { get; set; }
         public DateTime Required { get; set; }
         public string ShipName { get; set; }
@@ -192,35 +193,51 @@ namespace Assignment4
 
         public Product GetProduct(int id)
         {
-            return null;
+            using (var context = new Context())
+            {
+                var prod = context.Products.Include(x => x.Category)
+                    .Single(b => b.Id == id);
+                return prod;
+            }
         }
         
-        public List<Product> GetProductByName(string name)
+        public ICollection<Product> GetProductByName(string name)
         {
+//            using (var context = new Context())
+//            {
+//                var prod = context.Products
+//                    .Where();
+//                return prod;
+//            }
             return null;
         }
         
-        public List<Product> GetProductByCategory(int categoryId)
+        public ICollection<Product> GetProductByCategory(int categoryId)
         {
             return null;
         }
 
         public Order GetOrder(int id)
         {
-            return null;
+            using (var context = new Context())
+            {
+                var ord = context.Orders
+                    .Single(b => b.Id == id);
+                return ord;
+            }
         }
         
-        public List<Order> GetOrders()
+        public ICollection<Order> GetOrders()
         {
             return null;
         }
 
-        public List<OrderDetails> GetOrderDetailsByOrderId(int id)
+        public ICollection<OrderDetails> GetOrderDetailsByOrderId(int id)
         {
             return null;
         }
         
-        public List<OrderDetails> GetOrderDetailsByProductId(int id)
+        public ICollection<OrderDetails> GetOrderDetailsByProductId(int id)
         {
             return null;
         }

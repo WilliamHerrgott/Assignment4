@@ -1,35 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assignment4;
+﻿using Assignment4;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using WebService.Models;
 
 namespace WebService.Controllers
 {
     [Route("api/categories")]
     [ApiController]
-    public class CategoriesController : Controller
-    {
-        DataService _dataService;
+    public class CategoriesController : Controller {
+        private readonly DataService _dataService;
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, CategoryPostAndPutModel category)
-        {
-            var cat = _dataService.UpdateCategory(id, category.Name, category.Description);
-            if (cat == null) return NotFound();
-            return Ok(cat);
+        public CategoriesController(DataService dataService) {
+            _dataService = dataService;
         }
 
-        [HttpPut("{id}")]
-        public IActionResult DeleteCategory(int id)
+        [HttpGet]
+        public IActionResult GetCategories() {
+            var data = _dataService.GetCategories();
+
+            return Ok(data);
+        }
+        
+        [HttpGet("{id}")]
+        public IActionResult GetCategory(int id)
         {
-            var cat = _dataService.DeleteCategory(id);
-            if (cat == null) return NotFound();
-            return Ok(cat);
+            var category = _dataService.GetCategory(id);
+            
+            if (category == null) {
+                return NotFound();
+            }
+            return Ok(category);
         }
 
+        [HttpPost]
+        public IActionResult AddCategory(CategoryPostAndPutModel category)
+        {
+            _dataService.CreateCategory(category.Name, category.Description);
+            return Ok();
+        }
     }
 }

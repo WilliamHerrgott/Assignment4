@@ -1,4 +1,5 @@
-﻿using Assignment4;
+﻿using System;
+using Assignment4;
 using Microsoft.AspNetCore.Mvc;
 using WebService.Models;
 
@@ -32,10 +33,10 @@ namespace WebService.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddCategory(CategoryPostAndPutModel category)
-        {
-            _dataService.CreateCategory(category.Name, category.Description);
-            return Ok();
+        public IActionResult AddCategory(CategoryPostAndPutModel category) {
+            var cat = _dataService.CreateCategory(category.Name, category.Description);
+            
+            return Created("", cat);
         }
 
         [HttpPut("{id}")]
@@ -46,11 +47,13 @@ namespace WebService.Controllers
             return Ok(cat);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult DeleteCategory(int id)
-        {
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCategory(int id) {
             var cat = _dataService.DeleteCategory(id);
-            if (cat == false) return NotFound();
+            
+            if (cat == false) {
+                return NotFound();
+            }
             return Ok();
         }
     }

@@ -13,5 +13,6 @@ namespace WebService.Controllers
     [ApiController]
     public class ProductsController : Controller
     {
+        DataService _dataService;
     }
 }

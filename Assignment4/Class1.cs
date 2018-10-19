@@ -151,7 +151,7 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var cats = (from r in context.Categories select r).ToList();
+                var cats = context.Categories.ToList();
                 return cats;
             }
         }
@@ -203,7 +203,8 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var prod = context.Products.Include(x => x.Category)
+                var prod = context.Products
+                    .Include(x => x.Category)
                     .FirstOrDefault(b => b.Id == id);
                 return prod;
             }
@@ -213,7 +214,9 @@ namespace Assignment4
         {
              using (var context = new Context())
             {
-                var prods = (from p in context.Products where p.Name.Contains(name) select p).ToList();
+                var prods = context.Products
+                    .Where(p => p.Name.ToLower().Contains(name.ToLower()))
+                    .ToList();
                 return prods;
             }
         }
@@ -222,7 +225,9 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var prods = (from p in context.Products where p.CategoryId == categoryId select p).Include(p => p.Category)
+                var prods = context.Products
+                    .Where(p => p.CategoryId == categoryId)
+                    .Include(p => p.Category)
                     .ToList();
                 return prods;
             }
@@ -232,7 +237,10 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var ord = context.Orders.Include(x => x.OrderDetails)
+                var ord = context.Orders
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(c => c.Product)
+                            .ThenInclude(i => i.Category)
                     .FirstOrDefault(b => b.Id == id);
                 return ord;
             }
@@ -242,7 +250,8 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var orders = (from o in context.Orders select o).ToList();
+                var orders = context.Orders
+                    .ToList();
                 return orders;
             }
         }
@@ -251,8 +260,10 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var orders = context.OrderDetails.Where(o => o.OrderId == id)
-                    .Include(o => o.Product).ToList();
+                var orders = context.OrderDetails
+                    .Where(o => o.OrderId == id)
+                    .Include(o => o.Product)
+                    .ToList();
                 return orders;
             }
         }
@@ -261,7 +272,8 @@ namespace Assignment4
         {
             using (var context = new Context())
             {
-                var orders = context.OrderDetails.Where(o=>o.ProductId == id)
+                var orders = context.OrderDetails
+                    .Where(o=>o.ProductId == id)
                     .Include(o => o.Order)
                     .OrderBy(p => p.Order.Date)
                     .ToList();

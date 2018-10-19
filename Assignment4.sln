@@ -1,8 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assignment4", "Assignment4\Assignment4.csproj", "{EEF45A83-C65D-426A-A415-E1E3B081A043}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment4", "Assignment4\Assignment4.csproj", "{EEF45A83-C65D-426A-A415-E1E3B081A043}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAssignment4", "TestAssignment4\TestAssignment4.csproj", "{D3320D51-246F-4673-908B-F21BA6397032}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAssignment4", "TestAssignment4\TestAssignment4.csproj", "{D3320D51-246F-4673-908B-F21BA6397032}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "WebService\WebService.csproj", "{EA1ACA8B-91A9-4CBD-965D-E2EC941AEC5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,15 @@ Global
 		{D3320D51-246F-4673-908B-F21BA6397032}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3320D51-246F-4673-908B-F21BA6397032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3320D51-246F-4673-908B-F21BA6397032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA1ACA8B-91A9-4CBD-965D-E2EC941AEC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA1ACA8B-91A9-4CBD-965D-E2EC941AEC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA1ACA8B-91A9-4CBD-965D-E2EC941AEC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA1ACA8B-91A9-4CBD-965D-E2EC941AEC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3149B86A-844F-4EC0-BA6E-6BD7D2570FDA}
 	EndGlobalSection
 EndGlobal

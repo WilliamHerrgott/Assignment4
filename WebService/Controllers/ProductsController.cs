@@ -40,8 +40,6 @@ namespace WebService.Controllers
         {
             var cat = _dataService.GetProductByName(sub);
             if (cat == null) return NotFound("[]");
-            var _out = cat.Select(c => new ProductGetModel {Name = c.Name, CategoryName = c.Category.Name}).ToList();
-
             return Ok(cat);
         }
     }

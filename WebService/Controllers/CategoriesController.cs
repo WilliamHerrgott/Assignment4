@@ -37,5 +37,21 @@ namespace WebService.Controllers
             _dataService.CreateCategory(category.Name, category.Description);
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCategory(int id, CategoryPostAndPutModel category)
+        {
+            var cat = _dataService.UpdateCategory(id, category.Name, category.Description);
+            if (cat == false) return NotFound();
+            return Ok(cat);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult DeleteCategory(int id)
+        {
+            var cat = _dataService.DeleteCategory(id);
+            if (cat == false) return NotFound();
+            return Ok();
+        }
     }
 }

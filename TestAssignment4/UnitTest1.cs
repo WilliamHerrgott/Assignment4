@@ -121,7 +121,7 @@ namespace Assignment4.Tests
             var products = service.GetProductByName("ant");
             Assert.Equal(3, products.Count);
             Assert.Equal("Chef Anton's Cajun Seasoning", products.First().Name);
-            Assert.Equal("Guaran� Fant�stica", products.Last().Name);
+            Assert.Equal("Guaraná Fantástica", products.Last().Name);
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace Assignment4.Tests
             Assert.Equal(12, products.Count);
             Assert.Equal("Chai", products.First().Name);
             Assert.Equal("Beverages", products.First().Category.Name);
-            Assert.Equal("Lakkalik��ri", products.Last().Name);
+            Assert.Equal("Lakkalikööri", products.Last().Name);
         }
 
         /* orders */

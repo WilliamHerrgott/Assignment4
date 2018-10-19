@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Remotion.Linq.Clauses;
 
 
 namespace Assignment4
@@ -14,8 +15,6 @@ namespace Assignment4
     [Table("Categories")]
     public class Category
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -29,12 +28,12 @@ namespace Assignment4
             builder.Property(x => x.Id).HasColumnName("categoryid");
             builder.Property(x => x.Name).HasColumnName("categoryname");
             builder.Property(x => x.Description).HasColumnName("description");
+//            builder.Property(x => x.Id).ValueGeneratedOnAdd();
         }
     }
 
     public class Product
     {
-        [Key]
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string Name { get; set; }
@@ -135,6 +134,9 @@ namespace Assignment4
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.HasSequence<int>("OrderNumbers")
+                .StartsAt(99999)
+                .IncrementsBy(1);
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderDetailsConfiguration());
@@ -161,7 +163,7 @@ namespace Assignment4
             using (var context = new Context())
             {
                 var cat = context.Categories
-                    .Single(b => b.Id == id);
+                    .FirstOrDefault(b => b.Id == id);
                 return cat;
             }
         }
@@ -172,6 +174,7 @@ namespace Assignment4
             {
                 var cat = context.Categories.Add(new Category
                 {
+                    Id = context.Categories.Max(x => x.Id) + 1,
                     Name = name,
                     Description = description
                 });
@@ -190,13 +193,24 @@ namespace Assignment4
                 if (cat == null)
                     return false;
                 context.Categories.Remove(cat);
+                context.SaveChanges();
                 return true;
             }
         }
         
         public bool UpdateCategory(int id, string newName, string newDescription)
         {
-            return false;
+            var cat = GetCategory(id);
+            if (cat == null)
+                return false;
+            using (var context = new Context())
+            {
+                cat.Name = newName;
+                cat.Description = newDescription;
+                context.Categories.Update(cat);
+                context.SaveChanges();
+                return true;
+            }
         }
 
         public Product GetProduct(int id)

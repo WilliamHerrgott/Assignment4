@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Assignment4
-{
-    public class Order
-    {
+namespace Assignment4 {
+    public class Order {
         public int Id { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }
         public DateTime Date { get; set; }
@@ -15,10 +13,8 @@ namespace Assignment4
         public string ShipCity { get; set; }
     }
 
-    class OrderConfiguration : IEntityTypeConfiguration<Order>
-    {
-        public void Configure(EntityTypeBuilder<Order> builder)
-        {
+    class OrderConfiguration : IEntityTypeConfiguration<Order> {
+        public void Configure(EntityTypeBuilder<Order> builder) {
             builder.ToTable("orders");
             builder.Property(x => x.Id).HasColumnName("orderid");
             builder.Property(x => x.Date).HasColumnName("orderdate");

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,18 +6,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace Assignment4.Tests
-{
-    public class WebServiceTests
-    {
+namespace Assignment4.Tests {
+    public class WebServiceTests {
         private const string CategoriesApi = "http://localhost:5001/api/categories";
         private const string ProductsApi = "http://localhost:5001/api/products";
 
         /* /api/categories */
 
         [Fact]
-        public void ApiCategories_GetWithNoArguments_OkAndAllCategories()
-        {
+        public void ApiCategories_GetWithNoArguments_OkAndAllCategories() {
             var (data, statusCode) = GetArray(CategoriesApi);
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
@@ -28,8 +24,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_GetWithValidCategoryId_OkAndCategory()
-        {
+        public void ApiCategories_GetWithValidCategoryId_OkAndCategory() {
             var (category, statusCode) = GetObject($"{CategoriesApi}/1");
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
@@ -37,18 +32,15 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_GetWithInvalidCategoryId_NotFound()
-        {
+        public void ApiCategories_GetWithInvalidCategoryId_NotFound() {
             var (category, statusCode) = GetObject($"{CategoriesApi}/0");
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
         }
 
         [Fact]
-        public void ApiCategories_PostWithCategory_Created()
-        {
-            var newCategory = new
-            {
+        public void ApiCategories_PostWithCategory_Created() {
+            var newCategory = new {
                 Name = "Created",
                 Description = ""
             };
@@ -60,18 +52,14 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_PutWithValidCategory_Ok()
-        {
-
-            var data = new
-            {
+        public void ApiCategories_PutWithValidCategory_Ok() {
+            var data = new {
                 Name = "Created",
                 Description = "Created"
             };
             var (category, _) = PostData($"{CategoriesApi}", data);
 
-            var update = new
-            {
+            var update = new {
                 Id = category["id"],
                 Name = category["name"] + "Updated",
                 Description = category["description"] + "Updated"
@@ -90,10 +78,8 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_PutWithInvalidCategory_NotFound()
-        {
-            var update = new
-            {
+        public void ApiCategories_PutWithInvalidCategory_NotFound() {
+            var update = new {
                 Id = -1,
                 Name = "Updated",
                 Description = "Updated"
@@ -105,11 +91,8 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_DeleteWithValidId_Ok()
-        {
-
-            var data = new
-            {
+        public void ApiCategories_DeleteWithValidId_Ok() {
+            var data = new {
                 Name = "Created",
                 Description = "Created"
             };
@@ -121,9 +104,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiCategories_DeleteWithInvalidId_NotFound()
-        {
-
+        public void ApiCategories_DeleteWithInvalidId_NotFound() {
             var statusCode = DeleteData($"{CategoriesApi}/-1");
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
@@ -132,8 +113,7 @@ namespace Assignment4.Tests
         /* /api/products */
 
         [Fact]
-        public void ApiProducts_ValidId_CompleteProduct()
-        {
+        public void ApiProducts_ValidId_CompleteProduct() {
             var (product, statusCode) = GetObject($"{ProductsApi}/1");
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
@@ -142,16 +122,14 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiProducts_InvalidId_CompleteProduct()
-        {
+        public void ApiProducts_InvalidId_CompleteProduct() {
             var (product, statusCode) = GetObject($"{ProductsApi}/-1");
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
         }
 
         [Fact]
-        public void ApiProducts_CategoryValidId_ListOfProduct()
-        {
+        public void ApiProducts_CategoryValidId_ListOfProduct() {
             var (products, statusCode) = GetArray($"{ProductsApi}/category/1");
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
@@ -162,8 +140,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiProducts_CategoryInvalidId_EmptyListOfProductAndNotFound()
-        {
+        public void ApiProducts_CategoryInvalidId_EmptyListOfProductAndNotFound() {
             var (products, statusCode) = GetArray($"{ProductsApi}/category/1000001");
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
@@ -171,8 +148,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiProducts_NameContained_ListOfProduct()
-        {
+        public void ApiProducts_NameContained_ListOfProduct() {
             var (products, statusCode) = GetArray($"{ProductsApi}/name/ant");
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
@@ -182,8 +158,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void ApiProducts_NameNotContained_EmptyListOfProductAndNotFound()
-        {
+        public void ApiProducts_NameNotContained_EmptyListOfProductAndNotFound() {
             var (products, statusCode) = GetArray($"{ProductsApi}/name/RAWDATA");
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
@@ -191,27 +166,23 @@ namespace Assignment4.Tests
         }
 
 
-
         // Helpers
 
-        (JArray, HttpStatusCode) GetArray(string url)
-        {
+        (JArray, HttpStatusCode) GetArray(string url) {
             var client = new HttpClient();
             var response = client.GetAsync(url).Result;
             var data = response.Content.ReadAsStringAsync().Result;
-            return ((JArray)JsonConvert.DeserializeObject(data), response.StatusCode);
+            return ((JArray) JsonConvert.DeserializeObject(data), response.StatusCode);
         }
 
-        (JObject, HttpStatusCode) GetObject(string url)
-        {
+        (JObject, HttpStatusCode) GetObject(string url) {
             var client = new HttpClient();
             var response = client.GetAsync(url).Result;
             var data = response.Content.ReadAsStringAsync().Result;
-            return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
+            return ((JObject) JsonConvert.DeserializeObject(data), response.StatusCode);
         }
 
-        (JObject, HttpStatusCode) PostData(string url, object content)
-        {
+        (JObject, HttpStatusCode) PostData(string url, object content) {
             var client = new HttpClient();
             var requestContent = new StringContent(
                 JsonConvert.SerializeObject(content),
@@ -219,11 +190,10 @@ namespace Assignment4.Tests
                 "application/json");
             var response = client.PostAsync(url, requestContent).Result;
             var data = response.Content.ReadAsStringAsync().Result;
-            return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
+            return ((JObject) JsonConvert.DeserializeObject(data), response.StatusCode);
         }
 
-        HttpStatusCode PutData(string url, object content)
-        {
+        HttpStatusCode PutData(string url, object content) {
             var client = new HttpClient();
             var response = client.PutAsync(
                 url,
@@ -234,8 +204,7 @@ namespace Assignment4.Tests
             return response.StatusCode;
         }
 
-        HttpStatusCode DeleteData(string url)
-        {
+        HttpStatusCode DeleteData(string url) {
             var client = new HttpClient();
             var response = client.DeleteAsync(url).Result;
             return response.StatusCode;

@@ -2,15 +2,12 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Assignment4.Tests
-{
-    public class DataServiceTests
-    {
+namespace Assignment4.Tests {
+    public class DataServiceTests {
         /* Categories */
 
         [Fact]
-        public void Category_Object_HasIdNameAndDescription()
-        {
+        public void Category_Object_HasIdNameAndDescription() {
             var category = new Category();
             Assert.Equal(0, category.Id);
             Assert.Null(category.Name);
@@ -18,8 +15,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetAllCategories_NoArgument_ReturnsAllCategories()
-        {
+        public void GetAllCategories_NoArgument_ReturnsAllCategories() {
             var service = new DataService();
             var categories = service.GetCategories();
             Assert.Equal(8, categories.Count);
@@ -27,16 +23,14 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetCategory_ValidId_ReturnsCategoryObject()
-        {
+        public void GetCategory_ValidId_ReturnsCategoryObject() {
             var service = new DataService();
             var category = service.GetCategory(1);
             Assert.Equal("Beverages", category.Name);
         }
 
         [Fact]
-        public void CreateCategory_ValidData_CreteCategoryAndRetunsNewObject()
-        {
+        public void CreateCategory_ValidData_CreteCategoryAndRetunsNewObject() {
             var service = new DataService();
             var category = service.CreateCategory("Test", "CreateCategory_ValidData_CreteCategoryAndRetunsNewObject");
             Assert.True(category.Id > 0);
@@ -48,8 +42,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void DeleteCategory_ValidId_RemoveTheCategory()
-        {
+        public void DeleteCategory_ValidId_RemoveTheCategory() {
             var service = new DataService();
             var category = service.CreateCategory("Test", "DeleteCategory_ValidId_RemoveTheCategory");
             var result = service.DeleteCategory(category.Id);
@@ -59,18 +52,17 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void DeleteCategory_InvalidId_ReturnsFalse()
-        {
+        public void DeleteCategory_InvalidId_ReturnsFalse() {
             var service = new DataService();
             var result = service.DeleteCategory(-1);
             Assert.False(result);
         }
 
         [Fact]
-        public void UpdateCategory_NewNameAndDescription_UpdateWithNewValues()
-        {
+        public void UpdateCategory_NewNameAndDescription_UpdateWithNewValues() {
             var service = new DataService();
-            var category = service.CreateCategory("TestingUpdate", "UpdateCategory_NewNameAndDescription_UpdateWithNewValues");
+            var category = service.CreateCategory("TestingUpdate",
+                "UpdateCategory_NewNameAndDescription_UpdateWithNewValues");
 
             var result = service.UpdateCategory(category.Id, "UpdatedName", "UpdatedDescription");
             Assert.True(result);
@@ -85,8 +77,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void UpdateCategory_InvalidID_ReturnsFalse()
-        {
+        public void UpdateCategory_InvalidID_ReturnsFalse() {
             var service = new DataService();
             var result = service.UpdateCategory(-1, "UpdatedName", "UpdatedDescription");
             Assert.False(result);
@@ -95,8 +86,7 @@ namespace Assignment4.Tests
         /* products */
 
         [Fact]
-        public void Product_Object_HasIdNameUnitPriceQuantityPerUnitAndUnitsInStock()
-        {
+        public void Product_Object_HasIdNameUnitPriceQuantityPerUnitAndUnitsInStock() {
             var product = new Product();
             Assert.Equal(0, product.Id);
             Assert.Null(product.Name);
@@ -106,8 +96,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetProduct_ValidId_ReturnsProductWithCategory()
-        {
+        public void GetProduct_ValidId_ReturnsProductWithCategory() {
             var service = new DataService();
             var product = service.GetProduct(1);
             Assert.Equal("Chai", product.Name);
@@ -115,8 +104,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetProduct_NameSubString_ReturnsProductsThatMachesTheSubString()
-        {
+        public void GetProduct_NameSubString_ReturnsProductsThatMachesTheSubString() {
             var service = new DataService();
             var products = service.GetProductByName("ant");
             Assert.Equal(3, products.Count);
@@ -125,8 +113,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetProductsByCategory_ValidId_ReturnsProductWithCategory()
-        {
+        public void GetProductsByCategory_ValidId_ReturnsProductWithCategory() {
             var service = new DataService();
             var products = service.GetProductByCategory(1);
             Assert.Equal(12, products.Count);
@@ -137,8 +124,7 @@ namespace Assignment4.Tests
 
         /* orders */
         [Fact]
-        public void Order_Object_HasIdDatesAndOrderDetails()
-        {
+        public void Order_Object_HasIdDatesAndOrderDetails() {
             var order = new Order();
             Assert.Equal(0, order.Id);
             Assert.Equal(new DateTime(), order.Date);
@@ -149,8 +135,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetOrder_ValidId_ReturnsCompleteOrder()
-        {
+        public void GetOrder_ValidId_ReturnsCompleteOrder() {
             var service = new DataService();
             var order = service.GetOrder(10248);
             Assert.Equal(3, order.OrderDetails.Count);
@@ -159,8 +144,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetOrders()
-        {
+        public void GetOrders() {
             var service = new DataService();
             var orders = service.GetOrders();
             Assert.Equal(830, orders.Count);
@@ -169,8 +153,7 @@ namespace Assignment4.Tests
 
         /* orderdetails */
         [Fact]
-        public void OrderDetails_Object_HasOrderProductUnitPriceQuantityAndDiscount()
-        {
+        public void OrderDetails_Object_HasOrderProductUnitPriceQuantityAndDiscount() {
             var orderDetails = new OrderDetails();
             Assert.Equal(0, orderDetails.OrderId);
             Assert.Null(orderDetails.Order);
@@ -182,8 +165,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetOrderDetailByOrderId_ValidId_ReturnsProductNameUnitPriceAndQuantity()
-        {
+        public void GetOrderDetailByOrderId_ValidId_ReturnsProductNameUnitPriceAndQuantity() {
             var service = new DataService();
             var orderDetails = service.GetOrderDetailsByOrderId(10248);
             Assert.Equal(3, orderDetails.Count);
@@ -193,8 +175,7 @@ namespace Assignment4.Tests
         }
 
         [Fact]
-        public void GetOrderDetailByProductId_ValidId_ReturnsOrderDateUnitPriceAndQuantity()
-        {
+        public void GetOrderDetailByProductId_ValidId_ReturnsOrderDateUnitPriceAndQuantity() {
             var service = new DataService();
             var orderDetails = service.GetOrderDetailsByProductId(11);
             Assert.Equal(38, orderDetails.Count);

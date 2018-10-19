@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Assignment4
-{
-    public class Product
-    {
+namespace Assignment4 {
+    public class Product {
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string Name { get; set; }
@@ -14,10 +12,8 @@ namespace Assignment4
         public Category Category { get; set; }
     }
 
-    class ProductConfiguration : IEntityTypeConfiguration<Product>
-    {
-        public void Configure(EntityTypeBuilder<Product> builder)
-        {
+    class ProductConfiguration : IEntityTypeConfiguration<Product> {
+        public void Configure(EntityTypeBuilder<Product> builder) {
             builder.ToTable("products");
             builder.Property(x => x.Id).HasColumnName("productid");
             builder.Property(x => x.CategoryId).HasColumnName("categoryid");

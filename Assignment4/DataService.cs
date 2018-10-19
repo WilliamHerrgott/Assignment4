@@ -1,36 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
-namespace Assignment4
-{
-    public class DataService
-    {
-        public List<Category> GetCategories()
-        {
-            using (var context = new Context())
-            {
+namespace Assignment4 {
+    public class DataService {
+        public List<Category> GetCategories() {
+            using (var context = new Context()) {
                 var cats = context.Categories.ToList();
                 return cats;
             }
         }
 
-        public Category GetCategory(int id)
-        {
-            using (var context = new Context())
-            {
+        public Category GetCategory(int id) {
+            using (var context = new Context()) {
                 var cat = context.Categories
                     .FirstOrDefault(b => b.Id == id);
                 return cat;
             }
         }
 
-        public Category CreateCategory(string name, string description)
-        {
-            using (var context = new Context())
-            {
-                var cat = context.Categories.Add(new Category
-                {
+        public Category CreateCategory(string name, string description) {
+            using (var context = new Context()) {
+                var cat = context.Categories.Add(new Category {
                     Id = context.Categories.Max(x => x.Id) + 1,
                     Name = name,
                     Description = description
@@ -41,10 +32,8 @@ namespace Assignment4
             }
         }
 
-        public bool DeleteCategory(int id)
-        {
-            using (var context = new Context())
-            {
+        public bool DeleteCategory(int id) {
+            using (var context = new Context()) {
                 var cat = context.Categories
                     .FirstOrDefault(x => x.Id == id);
                 if (cat == null)
@@ -55,13 +44,11 @@ namespace Assignment4
             }
         }
 
-        public bool UpdateCategory(int id, string newName, string newDescription)
-        {
+        public bool UpdateCategory(int id, string newName, string newDescription) {
             var cat = GetCategory(id);
             if (cat == null)
                 return false;
-            using (var context = new Context())
-            {
+            using (var context = new Context()) {
                 cat.Name = newName;
                 cat.Description = newDescription;
                 context.Categories.Update(cat);
@@ -70,10 +57,8 @@ namespace Assignment4
             }
         }
 
-        public Product GetProduct(int id)
-        {
-            using (var context = new Context())
-            {
+        public Product GetProduct(int id) {
+            using (var context = new Context()) {
                 var prod = context.Products
                     .Include(x => x.Category)
                     .FirstOrDefault(b => b.Id == id);
@@ -81,10 +66,8 @@ namespace Assignment4
             }
         }
 
-        public ICollection<Product> GetProductByName(string name)
-        {
-            using (var context = new Context())
-            {
+        public ICollection<Product> GetProductByName(string name) {
+            using (var context = new Context()) {
                 var prods = context.Products
                     .Where(p => p.Name.ToLower().Contains(name.ToLower()))
                     .ToList();
@@ -92,10 +75,8 @@ namespace Assignment4
             }
         }
 
-        public ICollection<Product> GetProductByCategory(int categoryId)
-        {
-            using (var context = new Context())
-            {
+        public ICollection<Product> GetProductByCategory(int categoryId) {
+            using (var context = new Context()) {
                 var prods = context.Products
                     .Where(p => p.CategoryId == categoryId)
                     .Include(p => p.Category)
@@ -104,33 +85,27 @@ namespace Assignment4
             }
         }
 
-        public Order GetOrder(int id)
-        {
-            using (var context = new Context())
-            {
+        public Order GetOrder(int id) {
+            using (var context = new Context()) {
                 var ord = context.Orders
                     .Include(x => x.OrderDetails)
-                        .ThenInclude(c => c.Product)
-                            .ThenInclude(i => i.Category)
+                    .ThenInclude(c => c.Product)
+                    .ThenInclude(i => i.Category)
                     .FirstOrDefault(b => b.Id == id);
                 return ord;
             }
         }
 
-        public ICollection<Order> GetOrders()
-        {
-            using (var context = new Context())
-            {
+        public ICollection<Order> GetOrders() {
+            using (var context = new Context()) {
                 var orders = context.Orders
                     .ToList();
                 return orders.Count == 0 ? null : orders;
             }
         }
 
-        public ICollection<OrderDetails> GetOrderDetailsByOrderId(int id)
-        {
-            using (var context = new Context())
-            {
+        public ICollection<OrderDetails> GetOrderDetailsByOrderId(int id) {
+            using (var context = new Context()) {
                 var orders = context.OrderDetails
                     .Where(o => o.OrderId == id)
                     .Include(o => o.Product)
@@ -139,10 +114,8 @@ namespace Assignment4
             }
         }
 
-        public ICollection<OrderDetails> GetOrderDetailsByProductId(int id)
-        {
-            using (var context = new Context())
-            {
+        public ICollection<OrderDetails> GetOrderDetailsByProductId(int id) {
+            using (var context = new Context()) {
                 var orders = context.OrderDetails
                     .Where(o => o.ProductId == id)
                     .Include(o => o.Order)

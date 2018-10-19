@@ -88,7 +88,7 @@ namespace Assignment4
                 var prods = context.Products
                     .Where(p => p.Name.ToLower().Contains(name.ToLower()))
                     .ToList();
-                return prods;
+                return prods.Count == 0 ? null : prods;
             }
         }
 
@@ -100,7 +100,7 @@ namespace Assignment4
                     .Where(p => p.CategoryId == categoryId)
                     .Include(p => p.Category)
                     .ToList();
-                return prods;
+                return prods.Count == 0 ? null : prods;
             }
         }
 
@@ -123,7 +123,7 @@ namespace Assignment4
             {
                 var orders = context.Orders
                     .ToList();
-                return orders;
+                return orders.Count == 0 ? null : orders;
             }
         }
 
@@ -135,7 +135,7 @@ namespace Assignment4
                     .Where(o => o.OrderId == id)
                     .Include(o => o.Product)
                     .ToList();
-                return orders;
+                return orders.Count == 0 ? null : orders;
             }
         }
 
@@ -148,7 +148,7 @@ namespace Assignment4
                     .Include(o => o.Order)
                     .OrderBy(p => p.Order.Date)
                     .ToList();
-                return orders;
+                return orders.Count == 0 ? null : orders;
             }
         }
     }
